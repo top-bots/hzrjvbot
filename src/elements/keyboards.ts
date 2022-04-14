@@ -1,5 +1,5 @@
 import { Keyboard } from "grammy";
-import { constants } from "./config";
+import { constants } from "../config";
 
 export const kbMain = new Keyboard()
   .text(constants.M_ASK_Q)

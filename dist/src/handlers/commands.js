@@ -14,10 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
-const keyboards_1 = require("./keyboards");
+const keyboards_1 = require("../elements/keyboards");
 bot_1.default.command("start", (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.reply(config_1.constants.WELCOME);
-    // await ctx.reply("Check out this menu:", { reply_markup: menu });
     yield ctx.reply(config_1.constants.USE_MENU, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
     });

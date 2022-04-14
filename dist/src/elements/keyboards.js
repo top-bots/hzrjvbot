@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.kbQuestion = exports.kbMain = void 0;
 const grammy_1 = require("grammy");
-const config_1 = require("./config");
+const config_1 = require("../config");
 exports.kbMain = new grammy_1.Keyboard()
     .text(config_1.constants.M_ASK_Q)
     .row()

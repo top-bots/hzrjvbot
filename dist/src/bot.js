@@ -24,8 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const grammy_1 = require("grammy");
 const dotenv = __importStar(require("dotenv"));
+const grammy_1 = require("grammy");
+const config_1 = require("./config");
 dotenv.config();
 const bot = new grammy_1.Bot((_a = process.env.BOT_TOKEN) !== null && _a !== void 0 ? _a : "");
+function initial() {
+    return { state: config_1.states.DEFAULT, coins: 5, questions: [], answers: [] };
+}
+bot.use((0, grammy_1.session)({ initial }));
 exports.default = bot;
