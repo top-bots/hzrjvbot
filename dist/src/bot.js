@@ -30,7 +30,14 @@ const config_1 = require("./config");
 dotenv.config();
 const bot = new grammy_1.Bot((_a = process.env.BOT_TOKEN) !== null && _a !== void 0 ? _a : "");
 function initial() {
-    return { state: config_1.states.DEFAULT, coins: 5, questions: [], answers: [] };
+    return {
+        state: config_1.states.DEFAULT,
+        coins: 5,
+        score: 0,
+        questions: ["aaaa", "bbbb", "ccc", "dddd", "eeee"],
+        qIndex: 0,
+        answers: [],
+    };
 }
 bot.use((0, grammy_1.session)({ initial }));
 exports.default = bot;

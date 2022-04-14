@@ -1,23 +1,21 @@
 import * as dotenv from "dotenv";
-import { Bot, Context, session, SessionFlavor } from "grammy";
+import { Bot, session } from "grammy";
 import { states } from "./config";
+import { BotContext, SessionData } from "./types";
 
 dotenv.config();
-
-interface SessionData {
-  state: string;
-  coins: number;
-  question?: string;
-  questions: string[];
-  answers: string[];
-}
-
-type BotContext = Context & SessionFlavor<SessionData>;
 
 const bot = new Bot<BotContext>(process.env.BOT_TOKEN ?? "");
 
 function initial(): SessionData {
-  return { state: states.DEFAULT, coins: 5, questions: [], answers: [] };
+  return {
+    state: states.DEFAULT,
+    coins: 5,
+    score: 0,
+    questions: ["aaaa", "bbbb", "ccc", "dddd", "eeee"], //TODO
+    qIndex: 0,
+    answers: [],
+  };
 }
 bot.use(session({ initial }));
 
