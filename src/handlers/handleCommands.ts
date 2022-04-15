@@ -1,11 +1,20 @@
 import { constants, states } from "../config";
 import { menuQuestions } from "../elements/menus";
-import { makeQuestionItem } from "../functions";
+import { makeQuestionItem } from "../utils/functions";
 import { BotContext } from "../types";
 
+// check if the ctx state is default
+const checkDefaultState = (ctx: BotContext) =>
+  ctx.session.state === states.DEFAULT;
+
 export const handleAskQuestion = async (ctx: BotContext) => {
-  ctx.session.state = states.WRITE_Q;
-  await ctx.reply(constants.MSG_WRITE_Q);
+  const coins = ctx.session.coins;
+  if (coins > 0) {
+    ctx.session.state = states.WRITE_Q;
+    await ctx.reply(constants.MSG_WRITE_Q, {
+      reply_markup: { remove_keyboard: true },
+    });
+  } else ctx.reply(constants.ERR_CREDIT);
 };
 
 export const handleCredit = async (ctx: BotContext) => {

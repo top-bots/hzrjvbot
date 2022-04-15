@@ -12,10 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleMyQuestions = exports.handleScore = exports.handleCredit = exports.handleAskQuestion = void 0;
 const config_1 = require("../config");
 const menus_1 = require("../elements/menus");
-const functions_1 = require("../functions");
+const functions_1 = require("../utils/functions");
+// check if the ctx state is default
+const checkDefaultState = (ctx) => ctx.session.state === config_1.states.DEFAULT;
 const handleAskQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    ctx.session.state = config_1.states.WRITE_Q;
-    yield ctx.reply(config_1.constants.MSG_WRITE_Q);
+    const coins = ctx.session.coins;
+    if (coins > 0) {
+        ctx.session.state = config_1.states.WRITE_Q;
+        yield ctx.reply(config_1.constants.MSG_WRITE_Q, {
+            reply_markup: { remove_keyboard: true },
+        });
+    }
+    else
+        ctx.reply(config_1.constants.ERR_CREDIT);
 });
 exports.handleAskQuestion = handleAskQuestion;
 const handleCredit = (ctx) => __awaiter(void 0, void 0, void 0, function* () {

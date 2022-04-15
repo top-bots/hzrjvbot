@@ -5,7 +5,6 @@ import { makeQuestionItem } from "../utils/functions";
 import { BotContext } from "../types";
 
 const updateListQuestion = async (ctx: BotContext) => {
-  console.log(ctx.chat);
   const questions = ctx.session.questions;
   const i = ctx.session.qIndex;
   if (questions.length === 0) await ctx.reply(constants.MSG_NO_Q);

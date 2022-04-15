@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.states = exports.constants = void 0;
 exports.constants = {
+    SHOUT: "!!!!!!!!!!!!!!!1HERE!!!!!!!!!!!!!!!",
     // ids
     ID_BOT: "@hzrjvbot",
     ID_CH: "@hzrjvban",
+    ID_GP: 1087968824,
     // messages
     MSG_WELCOME: `سلام به ربات حاضر جواب خوش اومدی 😍 
 برای شروع میتونی از گزینه های موجود در منو استفاده کنی
@@ -31,6 +33,7 @@ exports.constants = {
     Q_SEND: "✔️ ارسال",
     Q_CANCEL: "❌ لغو",
     // errors
+    ERR_CREDIT: "شما سکه کافی برای سوال جدید ندارید",
     ERR_Q_LEN: "متن چت شما باید بین ۵ تا ۲۵۰ کلمه باشد",
     ERR_TRY_LATER: "سرور شلوغه یه بار دیگه امتحان کن",
 };

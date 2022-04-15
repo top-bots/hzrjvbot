@@ -8,6 +8,7 @@ export interface SessionData {
   questions: string[];
   qIndex: number;
   answers: string[];
+  name?: string;
 }
 
 export type BotContext = Context & SessionFlavor<SessionData>;

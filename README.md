@@ -12,3 +12,8 @@ invitation gift : 10
 | 20    |     0.9      |   18T |
 | 50    |     0.8      |   40T |
 | 100   |     0.7      |   70T |
+
+
+### Todo
+- database for questions
+- database for users

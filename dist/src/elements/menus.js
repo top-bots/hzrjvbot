@@ -18,7 +18,6 @@ const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const functions_1 = require("../utils/functions");
 const updateListQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(ctx.chat);
     const questions = ctx.session.questions;
     const i = ctx.session.qIndex;
     if (questions.length === 0)
