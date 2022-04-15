@@ -20,25 +20,17 @@ export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
     await bot.api
       .sendMessage(constants.ID_CH, question)
       .then(async (res) => {
-        console.log("messageSendt", res);
-        // add question to questions db
-        const questionObj = new Question({
-          from: ctx.from,
-          text: question,
-          channel_msg: res,
-        });
-        await questionObj.save();
-        // add questionId to related session in db
-        const questionId = questionObj._id.toString();
+        console.log("messageSentToChannel", res);
+        // add question to related session in db
         const updatedSession = {
           ...ctx.session,
-          questions: [...questions, questionId], // add question to list
+          questions: [...questions, question], // add question to list
           question: undefined, // remove question
           coins: coins - 1, // decrease coins
           votes: votes + 2, // increase votes
         };
         ctx.session = updatedSession;
-        console.log("handleQSend", ctx.session, questionObj);
+        console.log("handleQSend", ctx.session);
         // success
         await ctx.reply(constants.MSG_Q_SENT, {
           reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },

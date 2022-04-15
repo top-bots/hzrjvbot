@@ -16,7 +16,6 @@ exports.handleQSend = exports.handleQCancel = void 0;
 const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
 const bot_1 = __importDefault(require("../bot"));
-const models_1 = require("../db/models");
 const handleQCancel = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.reply(config_1.constants.MSG_Q_CANCEL, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
@@ -32,19 +31,11 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
         yield bot_1.default.api
             .sendMessage(config_1.constants.ID_CH, question)
             .then((res) => __awaiter(void 0, void 0, void 0, function* () {
-            console.log("messageSendt", res);
-            // add question to questions db
-            const questionObj = new models_1.Question({
-                from: ctx.from,
-                text: question,
-                channel_msg: res,
-            });
-            yield questionObj.save();
-            // add questionId to related session in db
-            const questionId = questionObj._id.toString();
-            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, questionId], question: undefined, coins: coins - 1, votes: votes + 2 });
+            console.log("messageSentToChannel", res);
+            // add question to related session in db
+            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, question], question: undefined, coins: coins - 1, votes: votes + 2 });
             ctx.session = updatedSession;
-            console.log("handleQSend", ctx.session, questionObj);
+            console.log("handleQSend", ctx.session);
             // success
             yield ctx.reply(config_1.constants.MSG_Q_SENT, {
                 reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },

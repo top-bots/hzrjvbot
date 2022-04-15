@@ -5,10 +5,6 @@ import { IQuestion } from "../types";
 export const questionSchema = new Schema<IQuestion>({
   from: Object,
   text: String,
-  answer: {
-    from: Object,
-    text: String,
-  },
 });
 
 export const sessionSchema = new Schema<ISession>({

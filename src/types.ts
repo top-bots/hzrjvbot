@@ -18,8 +18,4 @@ export type BotContext = Context & SessionFlavor<SessionData>;
 export interface IQuestion {
   from: object;
   text: string;
-  answer?: {
-    from: object;
-    text: string;
-  };
 }

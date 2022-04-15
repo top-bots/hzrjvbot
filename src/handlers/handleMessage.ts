@@ -22,39 +22,50 @@ const handleMessage = async (ctx: BotContext) => {
 
   // look for upvotes replies and give score
   if (ctx.chat?.id === constants.ID_GP && ctx.message?.from) {
-    console.log("sudoer", ctx.message, ctx.session);
+    console.log("voter", ctx.message, ctx.session);
     const text = ctx.message.text;
     const repliedMessage = ctx.message.reply_to_message;
     const answerer = repliedMessage?.from;
-    const answererId = answerer?.id.toString();
-    const votes = ctx.session.votes;
-    if (text === constants.TAG_ANSWER && !!answererId && votes > 0) {
+    const answererId = answerer?.id;
+    const voter = ctx.message.from;
+    const voterId = voter.id;
+    if (text === constants.TAG_ANSWER && !!answererId) {
       // decrease votes of current and notify
-      ctx.session.votes--;
-      await ctx.reply(constants.MSG_VOTED.replace("votes", votes.toString()));
-      // increase score of answerer
-      await Session.findOne(
-        { key: answererId },
-        async (err: any, session: any) => {
-          console.log("findSession", session, err);
-          if (session) {
-            session.set("value", {
-              ...session.value,
-              score: session.value.score + 1,
-            });
+      await Session.findOne({ key: voterId.toString() })
+        .then(async (session: any) => {
+          console.log("-vote", session);
+          const votes = session.value.votes;
+          if (votes > 0) {
+            // decrease votes
+            session.set("value", { ...session.value, votes: votes - 1 });
             await session.save();
-            console.log("upvoted", answererId);
+            console.log("decrease votes of", voterId);
+            // notify to voter
+            await bot.api.sendMessage(
+              voterId,
+              constants.MSG_VOTED.replace("votes", votes.toString())
+            );
+          } else {
+            await bot.api.sendMessage(voterId, constants.ERR_CANT_VOTE);
           }
-        }
-      );
-      // notify upvote to answerer
-      await bot.api.sendMessage(
-        answererId,
-        constants.MSG_CONGRAT.replace("answer", text)
-      );
-      // close comments
-    } else {
-      await ctx.reply(constants.ERR_CANT_VOTE);
+        })
+        .catch((err) => console.log("error findSession for votes", err));
+      // increase score of answerer
+      await Session.findOne({ key: answererId.toString() })
+        .then(async (session: any) => {
+          console.log("+score", session);
+          const score = session.value.score;
+          // increase score
+          session.set("value", { ...session.value, score: score + 1 });
+          await session.save();
+          console.log("upvoted", answererId);
+          // notify upvote to answerer
+          await bot.api.sendMessage(
+            answererId,
+            constants.MSG_CONGRAT.replace("answer", text)
+          );
+        })
+        .catch((err) => console.log("error findSession for scores", err));
     }
   }
 };

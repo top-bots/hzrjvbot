@@ -5,10 +5,6 @@ const mongoose_1 = require("mongoose");
 exports.questionSchema = new mongoose_1.Schema({
     from: Object,
     text: String,
-    answer: {
-        from: Object,
-        text: String,
-    },
 });
 exports.sessionSchema = new mongoose_1.Schema({
     _id: { $oid: String },
