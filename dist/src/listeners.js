@@ -25,6 +25,7 @@ const addListeners = () => {
     bot_1.default.hears(config_1.constants.M_CREDIT, handleCommands_1.handleCredit);
     bot_1.default.hears(config_1.constants.Q_CANCEL, handleQuestion_1.handleQCancel);
     bot_1.default.hears(config_1.constants.Q_SEND, handleQuestion_1.handleQSend);
+    bot_1.default.hears(config_1.constants.TAG_ANSWER, handleCommands_1.handleUpvote);
     /** HANDLE MESSAGE - DEPENGIN ON STATE */
     bot_1.default.on("message", handleMessage_1.default);
 };

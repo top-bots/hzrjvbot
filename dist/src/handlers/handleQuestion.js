@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleQSend = exports.handleQCancel = void 0;
+const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
-const bot_1 = __importDefault(require("../bot"));
 const handleQCancel = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.reply(config_1.constants.MSG_Q_CANCEL, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
@@ -25,19 +25,18 @@ exports.handleQCancel = handleQCancel;
 const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
     const questions = ctx.session.questions;
     const question = ctx.session.question;
-    const coins = ctx.session.coins;
-    const votes = ctx.session.votes;
+    const newCoins = ctx.session.coins + 2;
+    const newVotes = ctx.session.votes + 2;
     if (question)
         yield bot_1.default.api
             .sendMessage(config_1.constants.ID_CH, question)
             .then((res) => __awaiter(void 0, void 0, void 0, function* () {
             console.log("messageSentToChannel", res);
             // add question to related session in db
-            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, question], question: undefined, coins: coins - 1, votes: votes + 2 });
-            ctx.session = updatedSession;
+            ctx.session = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, question], question: undefined, coins: newCoins, votes: newVotes });
             console.log("handleQSend", ctx.session);
             // success
-            yield ctx.reply(config_1.constants.MSG_Q_SENT, {
+            yield ctx.reply(config_1.constants.MSG_Q_SENT.replace("votes", newVotes.toString()), {
                 reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
             });
         }))
