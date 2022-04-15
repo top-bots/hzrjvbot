@@ -17,7 +17,7 @@ const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
 const models_1 = require("./../db/models");
 const handleMessage = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e;
     // record question
     if (ctx.session.state === config_1.states.WRITE_Q) {
         // check question length
@@ -40,30 +40,26 @@ const handleMessage = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         const repliedMessage = ctx.message.reply_to_message;
         const answerer = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.from;
         const answererId = answerer === null || answerer === void 0 ? void 0 : answerer.id.toString();
-        if (text === config_1.constants.TAG_ANSWER && !!answererId) {
-            // find question and add answer to it
-            models_1.Question.findOne({ "from.id": (_f = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.from) === null || _f === void 0 ? void 0 : _f.id }, (err, question) => __awaiter(void 0, void 0, void 0, function* () {
-                var _g;
-                console.log("findQuestion", question, err);
-                if (!(question === null || question === void 0 ? void 0 : question.answer)) {
-                    console.log("questionCallback", question, err);
-                    question.set("answer", { text, from: (_g = ctx.message) === null || _g === void 0 ? void 0 : _g.from });
-                    yield question.save();
-                    console.log("updated question", question);
-                    // increase answerers score
-                    models_1.Session.findOne({ key: answererId }, (err, session) => __awaiter(void 0, void 0, void 0, function* () {
-                        console.log("findSession", session, err);
-                        if (session) {
-                            session.set("value", Object.assign(Object.assign({}, session.value), { score: session.value.score + 1 }));
-                            yield session.save();
-                            console.log("upvoted", answererId);
-                        }
-                    }));
-                    // notify upvote in chat
-                    bot_1.default.api.sendMessage(answererId, config_1.constants.MSG_CONGRAT.replace("answer", text));
-                    // close comments
+        const votes = ctx.session.votes;
+        if (text === config_1.constants.TAG_ANSWER && !!answererId && votes > 0) {
+            // decrease votes of current and notify
+            ctx.session.votes--;
+            yield ctx.reply(config_1.constants.MSG_VOTED.replace("votes", votes.toString()));
+            // increase score of answerer
+            yield models_1.Session.findOne({ key: answererId }, (err, session) => __awaiter(void 0, void 0, void 0, function* () {
+                console.log("findSession", session, err);
+                if (session) {
+                    session.set("value", Object.assign(Object.assign({}, session.value), { score: session.value.score + 1 }));
+                    yield session.save();
+                    console.log("upvoted", answererId);
                 }
             }));
+            // notify upvote to answerer
+            yield bot_1.default.api.sendMessage(answererId, config_1.constants.MSG_CONGRAT.replace("answer", text));
+            // close comments
+        }
+        else {
+            yield ctx.reply(config_1.constants.ERR_CANT_VOTE);
         }
     }
 });

@@ -17,6 +17,7 @@ const bootstrap = async () => {
     questions: ["aaaa", "bbbb", "ccc", "dddd", "eeee"], //TODO
     qIndex: 0,
     answers: [],
+    votes: 0,
   });
 
   // Stores data per user.

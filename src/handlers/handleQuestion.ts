@@ -15,6 +15,7 @@ export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
   const questions = ctx.session.questions;
   const question = ctx.session.question;
   const coins = ctx.session.coins;
+  const votes = ctx.session.votes;
   if (question)
     await bot.api
       .sendMessage(constants.ID_CH, question)
@@ -34,6 +35,7 @@ export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
           questions: [...questions, questionId], // add question to list
           question: undefined, // remove question
           coins: coins - 1, // decrease coins
+          votes: votes + 2, // increase votes
         };
         ctx.session = updatedSession;
         console.log("handleQSend", ctx.session, questionObj);
@@ -46,6 +48,5 @@ export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
         console.log(err);
         await ctx.reply(constants.ERR_TRY_LATER);
       });
-  // await next();
   return ctx.session;
 };

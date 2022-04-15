@@ -27,6 +27,7 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
     const questions = ctx.session.questions;
     const question = ctx.session.question;
     const coins = ctx.session.coins;
+    const votes = ctx.session.votes;
     if (question)
         yield bot_1.default.api
             .sendMessage(config_1.constants.ID_CH, question)
@@ -41,7 +42,7 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
             yield questionObj.save();
             // add questionId to related session in db
             const questionId = questionObj._id.toString();
-            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, questionId], question: undefined, coins: coins - 1 });
+            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, questionId], question: undefined, coins: coins - 1, votes: votes + 2 });
             ctx.session = updatedSession;
             console.log("handleQSend", ctx.session, questionObj);
             // success
@@ -53,7 +54,6 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
             console.log(err);
             yield ctx.reply(config_1.constants.ERR_TRY_LATER);
         }));
-    // await next();
     return ctx.session;
 });
 exports.handleQSend = handleQSend;
