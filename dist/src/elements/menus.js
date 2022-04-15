@@ -8,13 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.menuQuestions = void 0;
 const menu_1 = require("@grammyjs/menu");
-const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const functions_1 = require("../utils/functions");
 const updateListQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -48,4 +44,3 @@ exports.menuQuestions = new menu_1.Menu("questions-menu")
     ctx.session.qIndex = ctx.session.questions.length - 1;
     updateListQuestion(ctx);
 });
-bot_1.default.use(exports.menuQuestions);

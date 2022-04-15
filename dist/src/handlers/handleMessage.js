@@ -8,17 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
+const models_1 = require("./../db/models");
 const handleMessage = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f;
-    //console.log(ctx.session)
-    console.log((_a = ctx.message) === null || _a === void 0 ? void 0 : _a.text);
     // record question
     if (ctx.session.state === config_1.states.WRITE_Q) {
         // check question length
-        const question = (_d = (_c = (_b = ctx.message) === null || _b === void 0 ? void 0 : _b.text) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : "";
+        const question = (_c = (_b = (_a = ctx.message) === null || _a === void 0 ? void 0 : _a.text) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : "";
         if (question.length > 250 || question.length < 5) {
             yield ctx.reply(config_1.constants.ERR_Q_LEN);
         }
@@ -31,15 +34,36 @@ const handleMessage = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     // look for upvotes replies and give score
-    console.log(ctx.message);
-    if (((_f = (_e = ctx.message) === null || _e === void 0 ? void 0 : _e.from) === null || _f === void 0 ? void 0 : _f.id) === config_1.constants.ID_GP) {
-        console.log(config_1.constants.SHOUT);
-        const answererId = ctx.message.from.id.toString();
+    if (((_d = ctx.chat) === null || _d === void 0 ? void 0 : _d.id) === config_1.constants.ID_GP && ((_e = ctx.message) === null || _e === void 0 ? void 0 : _e.from)) {
+        console.log("sudoer", ctx.message, ctx.session);
+        const text = ctx.message.text;
         const repliedMessage = ctx.message.reply_to_message;
-        const isAsnwererUser = true;
-        if (!!repliedMessage && isAsnwererUser) {
-            // increase answerers score
-            // mark question as answered and set answer to question object
+        const answerer = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.from;
+        const answererId = answerer === null || answerer === void 0 ? void 0 : answerer.id.toString();
+        if (text === config_1.constants.TAG_ANSWER && !!answererId) {
+            // find question and add answer to it
+            models_1.Question.findOne({ "from.id": (_f = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.from) === null || _f === void 0 ? void 0 : _f.id }, (err, question) => __awaiter(void 0, void 0, void 0, function* () {
+                var _g;
+                console.log("findQuestion", question, err);
+                if (!(question === null || question === void 0 ? void 0 : question.answer)) {
+                    console.log("questionCallback", question, err);
+                    question.set("answer", { text, from: (_g = ctx.message) === null || _g === void 0 ? void 0 : _g.from });
+                    yield question.save();
+                    console.log("updated question", question);
+                    // increase answerers score
+                    models_1.Session.findOne({ key: answererId }, (err, session) => __awaiter(void 0, void 0, void 0, function* () {
+                        console.log("findSession", session, err);
+                        if (session) {
+                            session.set("value", Object.assign(Object.assign({}, session.value), { score: session.value.score + 1 }));
+                            yield session.save();
+                            console.log("upvoted", answererId);
+                        }
+                    }));
+                    // notify upvote in chat
+                    bot_1.default.api.sendMessage(answererId, config_1.constants.MSG_CONGRAT.replace("answer", text));
+                    // close comments
+                }
+            }));
         }
     }
 });

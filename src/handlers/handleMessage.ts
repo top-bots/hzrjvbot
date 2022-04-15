@@ -1,11 +1,10 @@
+import bot from "../bot";
 import { constants, states } from "../config";
 import { kbQuestion } from "../elements/keyboards";
 import { BotContext } from "../types";
+import { Question, Session } from "./../db/models";
 
 const handleMessage = async (ctx: BotContext) => {
-  //console.log(ctx.session)
-  console.log(ctx.message?.text);
-
   // record question
   if (ctx.session.state === states.WRITE_Q) {
     // check question length
@@ -22,15 +21,47 @@ const handleMessage = async (ctx: BotContext) => {
   }
 
   // look for upvotes replies and give score
-  console.log(ctx.message);
-  if (ctx.message?.from?.id === constants.ID_GP) {
-    console.log(constants.SHOUT);
-    const answererId = ctx.message.from.id.toString();
+  if (ctx.chat?.id === constants.ID_GP && ctx.message?.from) {
+    console.log("sudoer", ctx.message, ctx.session);
+    const text = ctx.message.text;
     const repliedMessage = ctx.message.reply_to_message;
-    const isAsnwererUser = true;
-    if (!!repliedMessage && isAsnwererUser) {
-      // increase answerers score
-      // mark question as answered and set answer to question object
+    const answerer = repliedMessage?.from;
+    const answererId = answerer?.id.toString();
+    if (text === constants.TAG_ANSWER && !!answererId) {
+      // find question and add answer to it
+      Question.findOne(
+        { "from.id": repliedMessage?.from?.id },
+        async (err: any, question: any) => {
+          console.log("findQuestion", question, err);
+          if (!question?.answer) {
+            console.log("questionCallback", question, err);
+            question.set("answer", { text, from: ctx.message?.from });
+            await question.save();
+            console.log("updated question", question);
+            // increase answerers score
+            Session.findOne(
+              { key: answererId },
+              async (err: any, session: any) => {
+                console.log("findSession", session, err);
+                if (session) {
+                  session.set("value", {
+                    ...session.value,
+                    score: session.value.score + 1,
+                  });
+                  await session.save();
+                  console.log("upvoted", answererId);
+                }
+              }
+            );
+            // notify upvote in chat
+            bot.api.sendMessage(
+              answererId,
+              constants.MSG_CONGRAT.replace("answer", text)
+            );
+            // close comments
+          }
+        }
+      );
     }
   }
 };

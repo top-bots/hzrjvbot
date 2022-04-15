@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
 const handleStart = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    // update user session id
+    ctx.session.id = (_b = (_a = ctx.from) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : 0;
+    // say welcome
     yield ctx.reply(config_1.constants.MSG_WELCOME);
     yield ctx.reply(config_1.constants.MSG_USE_MENU, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },

@@ -19,7 +19,7 @@ export const handleAskQuestion = async (ctx: BotContext) => {
 
 export const handleCredit = async (ctx: BotContext) => {
   const coins = ctx.session.coins;
-  const message = constants.MSG_CREDIT.replace("coins", coins.toString());
+  const message = constants.MSG_CREDIT.replace("coins", coins?.toString());
   await ctx.reply(message);
 };
 
@@ -31,7 +31,8 @@ export const handleScore = async (ctx: BotContext) => {
 
 export const handleMyQuestions = async (ctx: BotContext) => {
   const questions = ctx.session.questions;
-  const i = ctx.session.qIndex;
+  const i = 0;
+  ctx.session.qIndex = i; // reset qIndex for menu
   if (questions.length === 0) await ctx.reply(constants.MSG_NO_Q);
   else
     await ctx.reply(makeQuestionItem(questions, i), {

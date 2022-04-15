@@ -16,36 +16,44 @@ exports.handleQSend = exports.handleQCancel = void 0;
 const config_1 = require("../config");
 const keyboards_1 = require("../elements/keyboards");
 const bot_1 = __importDefault(require("../bot"));
+const models_1 = require("../db/models");
 const handleQCancel = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.reply(config_1.constants.MSG_Q_CANCEL, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
     });
 });
 exports.handleQCancel = handleQCancel;
-const handleQSend = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    if (ctx.session.question)
-        bot_1.default.api
-            .sendMessage(config_1.constants.ID_CH, ctx.session.question)
-            .then((res) => {
-            if (ctx.session.question) {
-                // add question to questions list
-                ctx.session.questions = [
-                    ...ctx.session.questions,
-                    ctx.session.question,
-                ];
-                // reset question
-                ctx.session.question = undefined;
-            }
-            // decrease coins
-            ctx.session.coins--;
+const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const questions = ctx.session.questions;
+    const question = ctx.session.question;
+    const coins = ctx.session.coins;
+    if (question)
+        yield bot_1.default.api
+            .sendMessage(config_1.constants.ID_CH, question)
+            .then((res) => __awaiter(void 0, void 0, void 0, function* () {
+            console.log("messageSendt", res);
+            // add question to questions db
+            const questionObj = new models_1.Question({
+                from: ctx.from,
+                text: question,
+                channel_msg: res,
+            });
+            yield questionObj.save();
+            // add questionId to related session in db
+            const questionId = questionObj._id.toString();
+            const updatedSession = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, questionId], question: undefined, coins: coins - 1 });
+            ctx.session = updatedSession;
+            console.log("handleQSend", ctx.session, questionObj);
             // success
-            ctx.reply(config_1.constants.MSG_Q_SENT, {
+            yield ctx.reply(config_1.constants.MSG_Q_SENT, {
                 reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
             });
-        })
-            .catch((err) => {
+        }))
+            .catch((err) => __awaiter(void 0, void 0, void 0, function* () {
             console.log(err);
-            ctx.reply(config_1.constants.ERR_TRY_LATER);
-        });
+            yield ctx.reply(config_1.constants.ERR_TRY_LATER);
+        }));
+    // await next();
+    return ctx.session;
 });
 exports.handleQSend = handleQSend;

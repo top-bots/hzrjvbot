@@ -29,7 +29,7 @@ const handleAskQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* (
 exports.handleAskQuestion = handleAskQuestion;
 const handleCredit = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const coins = ctx.session.coins;
-    const message = config_1.constants.MSG_CREDIT.replace("coins", coins.toString());
+    const message = config_1.constants.MSG_CREDIT.replace("coins", coins === null || coins === void 0 ? void 0 : coins.toString());
     yield ctx.reply(message);
 });
 exports.handleCredit = handleCredit;
@@ -41,7 +41,8 @@ const handleScore = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
 exports.handleScore = handleScore;
 const handleMyQuestions = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const questions = ctx.session.questions;
-    const i = ctx.session.qIndex;
+    const i = 0;
+    ctx.session.qIndex = i; // reset qIndex for menu
     if (questions.length === 0)
         yield ctx.reply(config_1.constants.MSG_NO_Q);
     else

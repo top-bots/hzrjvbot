@@ -1,8 +1,7 @@
 import { Menu } from "@grammyjs/menu";
-import bot from "../bot";
 import { constants } from "../config";
-import { makeQuestionItem } from "../utils/functions";
 import { BotContext } from "../types";
+import { makeQuestionItem } from "../utils/functions";
 
 const updateListQuestion = async (ctx: BotContext) => {
   const questions = ctx.session.questions;
@@ -50,5 +49,3 @@ export const menuQuestions = new Menu<BotContext>("questions-menu")
       updateListQuestion(ctx);
     }
   );
-
-bot.use(menuQuestions);
