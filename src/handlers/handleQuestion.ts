@@ -13,7 +13,7 @@ export const handleQCancel = async (ctx: BotContext) => {
 export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
   const questions = ctx.session.questions;
   const question = ctx.session.question;
-  const newCoins = ctx.session.coins + 2;
+  const newCoins = ctx.session.coins - 1;
   const newVotes = ctx.session.votes + 2;
   if (question)
     await bot.api

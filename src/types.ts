@@ -5,12 +5,11 @@ export interface SessionData {
   state: string;
   coins: number;
   score: number;
+  votes: number;
   question?: string;
   questions: string[];
   qIndex: number;
-  answers: string[];
   name?: string;
-  votes: number;
 }
 
 export type BotContext = Context & SessionFlavor<SessionData>;

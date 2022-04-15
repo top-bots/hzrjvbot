@@ -25,7 +25,7 @@ exports.handleQCancel = handleQCancel;
 const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
     const questions = ctx.session.questions;
     const question = ctx.session.question;
-    const newCoins = ctx.session.coins + 2;
+    const newCoins = ctx.session.coins - 1;
     const newVotes = ctx.session.votes + 2;
     if (question)
         yield bot_1.default.api

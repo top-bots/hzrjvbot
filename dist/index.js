@@ -26,10 +26,9 @@ const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
         state: config_1.states.DEFAULT,
         coins: 5,
         score: 0,
-        questions: ["aaaa", "bbbb", "ccc", "dddd", "eeee"],
-        qIndex: 0,
-        answers: [],
         votes: 0,
+        questions: [],
+        qIndex: 0,
     });
     // Stores data per user.
     const getSessionKey = (ctx) => {

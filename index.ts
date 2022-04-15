@@ -14,10 +14,9 @@ const bootstrap = async () => {
     state: states.DEFAULT,
     coins: 5,
     score: 0,
-    questions: ["aaaa", "bbbb", "ccc", "dddd", "eeee"], //TODO
-    qIndex: 0,
-    answers: [],
     votes: 0,
+    questions: [],
+    qIndex: 0,
   });
 
   // Stores data per user.

@@ -5,6 +5,7 @@ import { BotContext } from "../types";
 const handleStart = async (ctx: BotContext) => {
   // update user session id
   ctx.session.id = ctx.from?.id ?? 0;
+  ctx.session.name = ctx.from?.username;
   // say welcome
   await ctx.reply(constants.MSG_WELCOME);
   await ctx.reply(constants.MSG_USE_MENU, {
