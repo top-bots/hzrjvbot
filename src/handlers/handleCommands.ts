@@ -2,12 +2,7 @@ import bot from "../bot";
 import { constants, states } from "../config";
 import { menuQuestions } from "../elements/menus";
 import { BotContext } from "../types";
-import { makeQuestionItem } from "../utils/functions";
 import { Session } from "./../db/models";
-
-// check if the ctx state is default
-const checkDefaultState = (ctx: BotContext) =>
-  ctx.session.state === states.DEFAULT;
 
 export const handleAskQuestion = async (ctx: BotContext) => {
   const coins = ctx.session.coins;
@@ -21,17 +16,14 @@ export const handleAskQuestion = async (ctx: BotContext) => {
 
 export const handleCredit = async (ctx: BotContext) => {
   const coins = ctx.session.coins;
-  const message = constants.MSG_CREDIT.replace("coins", coins?.toString());
+  const message = constants.MSG_CREDIT(coins);
   await ctx.reply(message);
 };
 
 export const handleScore = async (ctx: BotContext) => {
   const score = ctx.session.score;
   const votes = ctx.session.votes;
-  const message = constants.MSG_SCORE.replace(
-    "score",
-    score.toString()
-  ).replace("votes", votes?.toString());
+  const message = constants.MSG_SCORE(score, votes);
   await ctx.reply(message);
 };
 
@@ -41,7 +33,7 @@ export const handleMyQuestions = async (ctx: BotContext) => {
   ctx.session.qIndex = i; // reset qIndex for menu
   if (questions.length === 0) await ctx.reply(constants.MSG_NO_Q);
   else
-    await ctx.reply(makeQuestionItem(questions, i), {
+    await ctx.reply(constants.MSG_Q_ITEM(questions, i), {
       reply_markup: menuQuestions,
     });
 };
@@ -63,10 +55,7 @@ export const handleUpvote = async (ctx: BotContext) => {
         ctx.session.votes = newVotes;
         console.log("-vote", ctx.session);
         // notify to voter privately
-        await bot.api.sendMessage(
-          voterId,
-          constants.MSG_VOTED.replace("votes", newVotes.toString())
-        );
+        await bot.api.sendMessage(voterId, constants.MSG_VOTED(newVotes));
 
         // increase score of answerer
         await Session.findOne({ key: answererId.toString() })
@@ -80,10 +69,7 @@ export const handleUpvote = async (ctx: BotContext) => {
             // notify upvote to answerer
             await bot.api.sendMessage(
               answererId,
-              constants.MSG_CONGRAT.replace(
-                "answer",
-                repliedMessage?.text?.toString() ?? ""
-              )
+              constants.MSG_CONGRAT(repliedMessage?.text ?? "---")
             );
           })
           .catch((err) => console.log("error findSession for scores", err));

@@ -12,14 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.menuQuestions = void 0;
 const menu_1 = require("@grammyjs/menu");
 const config_1 = require("../config");
-const functions_1 = require("../utils/functions");
 const updateListQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const questions = ctx.session.questions;
     const i = ctx.session.qIndex;
     if (questions.length === 0)
         yield ctx.reply(config_1.constants.MSG_NO_Q);
     else
-        yield ctx.editMessageText((0, functions_1.makeQuestionItem)(questions, i));
+        yield ctx.editMessageText(config_1.constants.MSG_Q_ITEM(questions, i));
 });
 exports.menuQuestions = new menu_1.Menu("questions-menu")
     .text((ctx) => ctx.session.questions.length > 0 && ctx.session.qIndex > 0 ? "⏪" : "", (ctx) => {

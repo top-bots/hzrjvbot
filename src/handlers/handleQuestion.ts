@@ -30,12 +30,9 @@ export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
         };
         console.log("handleQSend", ctx.session);
         // success
-        await ctx.reply(
-          constants.MSG_Q_SENT.replace("votes", newVotes.toString()),
-          {
-            reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },
-          }
-        );
+        await ctx.reply(constants.MSG_Q_SENT(newVotes), {
+          reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },
+        });
       })
       .catch(async (err) => {
         console.log(err);

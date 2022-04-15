@@ -36,7 +36,7 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
             ctx.session = Object.assign(Object.assign({}, ctx.session), { questions: [...questions, question], question: undefined, coins: newCoins, votes: newVotes });
             console.log("handleQSend", ctx.session);
             // success
-            yield ctx.reply(config_1.constants.MSG_Q_SENT.replace("votes", newVotes.toString()), {
+            yield ctx.reply(config_1.constants.MSG_Q_SENT(newVotes), {
                 reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
             });
         }))

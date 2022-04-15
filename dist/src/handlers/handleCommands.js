@@ -16,10 +16,7 @@ exports.handleUpvote = exports.handleMyQuestions = exports.handleScore = exports
 const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const menus_1 = require("../elements/menus");
-const functions_1 = require("../utils/functions");
 const models_1 = require("./../db/models");
-// check if the ctx state is default
-const checkDefaultState = (ctx) => ctx.session.state === config_1.states.DEFAULT;
 const handleAskQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const coins = ctx.session.coins;
     if (coins > 0) {
@@ -34,14 +31,14 @@ const handleAskQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* (
 exports.handleAskQuestion = handleAskQuestion;
 const handleCredit = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const coins = ctx.session.coins;
-    const message = config_1.constants.MSG_CREDIT.replace("coins", coins === null || coins === void 0 ? void 0 : coins.toString());
+    const message = config_1.constants.MSG_CREDIT(coins);
     yield ctx.reply(message);
 });
 exports.handleCredit = handleCredit;
 const handleScore = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const score = ctx.session.score;
     const votes = ctx.session.votes;
-    const message = config_1.constants.MSG_SCORE.replace("score", score.toString()).replace("votes", votes === null || votes === void 0 ? void 0 : votes.toString());
+    const message = config_1.constants.MSG_SCORE(score, votes);
     yield ctx.reply(message);
 });
 exports.handleScore = handleScore;
@@ -52,7 +49,7 @@ const handleMyQuestions = (ctx) => __awaiter(void 0, void 0, void 0, function* (
     if (questions.length === 0)
         yield ctx.reply(config_1.constants.MSG_NO_Q);
     else
-        yield ctx.reply((0, functions_1.makeQuestionItem)(questions, i), {
+        yield ctx.reply(config_1.constants.MSG_Q_ITEM(questions, i), {
             reply_markup: menus_1.menuQuestions,
         });
 });
@@ -75,11 +72,11 @@ const handleUpvote = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
                 ctx.session.votes = newVotes;
                 console.log("-vote", ctx.session);
                 // notify to voter privately
-                yield bot_1.default.api.sendMessage(voterId, config_1.constants.MSG_VOTED.replace("votes", newVotes.toString()));
+                yield bot_1.default.api.sendMessage(voterId, config_1.constants.MSG_VOTED(newVotes));
                 // increase score of answerer
                 yield models_1.Session.findOne({ key: answererId.toString() })
                     .then((answererSession) => __awaiter(void 0, void 0, void 0, function* () {
-                    var _c, _d;
+                    var _c;
                     // increase score
                     const newScore = answererSession.value.score + 1;
                     yield answererSession.set("value.score", newScore);
@@ -87,7 +84,7 @@ const handleUpvote = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
                     yield answererSession.save();
                     console.log("+score", answererSession);
                     // notify upvote to answerer
-                    yield bot_1.default.api.sendMessage(answererId, config_1.constants.MSG_CONGRAT.replace("answer", (_d = (_c = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.text) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""));
+                    yield bot_1.default.api.sendMessage(answererId, config_1.constants.MSG_CONGRAT((_c = repliedMessage === null || repliedMessage === void 0 ? void 0 : repliedMessage.text) !== null && _c !== void 0 ? _c : "---"));
                 }))
                     .catch((err) => console.log("error findSession for scores", err));
             }
