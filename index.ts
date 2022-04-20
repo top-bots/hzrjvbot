@@ -1,12 +1,10 @@
-import { ISession, MongoDBAdapter } from "@satont/grammy-mongodb-storage";
+import { run } from "@grammyjs/runner";
 import { session } from "grammy";
-import mongoose from "mongoose";
 import bot from "./src/bot";
 import { states } from "./src/config";
 import { menuQuestions } from "./src/elements/menus";
 import { addListeners } from "./src/listeners";
 import { SessionData } from "./src/types";
-import { run } from "@grammyjs/runner";
 
 const bootstrap = async () => {
   // initial data for user session
@@ -28,15 +26,15 @@ const bootstrap = async () => {
   };
 
   // set-up db connections
-  await mongoose.connect("mongodb://127.0.0.1:27017/test");
-  const collection = mongoose.connection.db.collection<ISession>("sessions");
+  // await mongoose.connect("mongodb://127.0.0.1:27017/test");
+  // const collection = mongoose.connection.db.collection<ISession>("sessions");
 
   // use config
   bot.use(
     session({
       initial,
       getSessionKey,
-      storage: new MongoDBAdapter<SessionData>({ collection }),
+      // storage: new MongoDBAdapter<SessionData>({ collection }),
     })
   );
 };
@@ -45,7 +43,7 @@ const startBot = async () => {
   await bootstrap();
   bot.use(menuQuestions);
   addListeners();
-  run(bot)
+  run(bot);
 };
 
 startBot();
