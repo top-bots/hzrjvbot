@@ -1,10 +1,10 @@
 import bot from "../bot";
 import { constants, states } from "../config";
 import { menuQuestions } from "../elements/menus";
-import { BotContext } from "../types";
+import { IBotContext } from "../types";
 import { Session } from "./../db/models";
 
-export const handleAskQuestion = async (ctx: BotContext) => {
+export const handleAskQuestion = async (ctx: IBotContext) => {
   const coins = ctx.session.coins;
   if (coins > 0) {
     ctx.session.state = states.WRITE_Q;
@@ -14,20 +14,20 @@ export const handleAskQuestion = async (ctx: BotContext) => {
   } else ctx.reply(constants.ERR_CREDIT);
 };
 
-export const handleCredit = async (ctx: BotContext) => {
+export const handleCredit = async (ctx: IBotContext) => {
   const coins = ctx.session.coins;
   const message = constants.MSG_CREDIT(coins);
   await ctx.reply(message);
 };
 
-export const handleScore = async (ctx: BotContext) => {
+export const handleScore = async (ctx: IBotContext) => {
   const score = ctx.session.score;
   const votes = ctx.session.votes;
   const message = constants.MSG_SCORE(score, votes);
   await ctx.reply(message);
 };
 
-export const handleMyQuestions = async (ctx: BotContext) => {
+export const handleMyQuestions = async (ctx: IBotContext) => {
   const questions = ctx.session.questions;
   const i = 0;
   ctx.session.qIndex = i; // reset qIndex for menu
@@ -38,7 +38,7 @@ export const handleMyQuestions = async (ctx: BotContext) => {
     });
 };
 
-export const handleUpvote = async (ctx: BotContext) => {
+export const handleUpvote = async (ctx: IBotContext) => {
   // check if it is correct chat - channel's supergroup
   if (ctx.chat?.id === constants.ID_GP && ctx.message?.from) {
     const repliedMessage = ctx.message.reply_to_message;

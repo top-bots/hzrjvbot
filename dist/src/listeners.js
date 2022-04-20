@@ -28,5 +28,6 @@ const addListeners = () => {
     bot_1.default.hears(config_1.constants.TAG_ANSWER, handleCommands_1.handleUpvote);
     /** HANDLE MESSAGE - DEPENGIN ON STATE */
     bot_1.default.on("message", handleMessage_1.default);
+    bot_1.default.on("sticker", () => { });
 };
 exports.addListeners = addListeners;

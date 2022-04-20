@@ -5,7 +5,7 @@ import {
   handleCredit,
   handleMyQuestions,
   handleScore,
-  handleUpvote
+  handleUpvote,
 } from "./handlers/handleCommands";
 import handleMessage from "./handlers/handleMessage";
 import { handleQCancel, handleQSend } from "./handlers/handleQuestion";
@@ -29,4 +29,5 @@ export const addListeners = () => {
   bot.hears(constants.TAG_ANSWER, handleUpvote);
   /** HANDLE MESSAGE - DEPENGIN ON STATE */
   bot.on("message", handleMessage);
+  bot.on("sticker", () => {});
 };

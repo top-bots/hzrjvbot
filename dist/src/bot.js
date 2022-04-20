@@ -24,8 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const grammy_1 = require("grammy");
 const dotenv = __importStar(require("dotenv"));
+const telegraf_1 = require("telegraf");
 dotenv.config();
-const bot = new grammy_1.Bot((_a = process.env.BOT_TOKEN) !== null && _a !== void 0 ? _a : "");
+const bot = new telegraf_1.Telegraf((_a = process.env.BOT_TOKEN) !== null && _a !== void 0 ? _a : "", {});
 exports.default = bot;

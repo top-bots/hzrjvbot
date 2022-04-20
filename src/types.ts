@@ -1,6 +1,6 @@
-import { Context, SessionFlavor } from "grammy";
+import { Context } from "telegraf";
 
-export interface SessionData {
+export interface ISession {
   id: number;
   state: string;
   coins: number;
@@ -12,8 +12,9 @@ export interface SessionData {
   name?: string;
 }
 
-export type BotContext = Context & SessionFlavor<SessionData>;
-
+export interface IBotContext extends Context {
+  session: ISession;
+}
 export interface IQuestion {
   from: object;
   text: string;
