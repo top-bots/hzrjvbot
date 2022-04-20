@@ -19,6 +19,7 @@ const bot_1 = __importDefault(require("./src/bot"));
 const config_1 = require("./src/config");
 const menus_1 = require("./src/elements/menus");
 const listeners_1 = require("./src/listeners");
+const runner_1 = require("@grammyjs/runner");
 const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
     // initial data for user session
     const initial = () => ({
@@ -51,9 +52,6 @@ const startBot = () => __awaiter(void 0, void 0, void 0, function* () {
     yield bootstrap();
     bot_1.default.use(menus_1.menuQuestions);
     (0, listeners_1.addListeners)();
-    bot_1.default
-        .start()
-        .then((res) => console.log("BOT STARTED!", res))
-        .catch((err) => console.log("BOT FAILED!", err));
+    (0, runner_1.run)(bot_1.default);
 });
 startBot();

@@ -6,6 +6,7 @@ import { states } from "./src/config";
 import { menuQuestions } from "./src/elements/menus";
 import { addListeners } from "./src/listeners";
 import { SessionData } from "./src/types";
+import { run } from "@grammyjs/runner";
 
 const bootstrap = async () => {
   // initial data for user session
@@ -44,10 +45,7 @@ const startBot = async () => {
   await bootstrap();
   bot.use(menuQuestions);
   addListeners();
-  bot
-    .start()
-    .then((res) => console.log("BOT STARTED!", res))
-    .catch((err) => console.log("BOT FAILED!", err));
+  run(bot)
 };
 
 startBot();
