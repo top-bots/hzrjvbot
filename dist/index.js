@@ -12,14 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const grammy_mongodb_storage_1 = require("@satont/grammy-mongodb-storage");
+const runner_1 = require("@grammyjs/runner");
 const grammy_1 = require("grammy");
-const mongoose_1 = __importDefault(require("mongoose"));
 const bot_1 = __importDefault(require("./src/bot"));
 const config_1 = require("./src/config");
 const menus_1 = require("./src/elements/menus");
 const listeners_1 = require("./src/listeners");
-const runner_1 = require("@grammyjs/runner");
 const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
     // initial data for user session
     const initial = () => ({
@@ -39,13 +37,13 @@ const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
         return (_a = ctx.from) === null || _a === void 0 ? void 0 : _a.id.toString();
     };
     // set-up db connections
-    yield mongoose_1.default.connect("mongodb://127.0.0.1:27017/test");
-    const collection = mongoose_1.default.connection.db.collection("sessions");
+    // await mongoose.connect("mongodb://127.0.0.1:27017/test");
+    // const collection = mongoose.connection.db.collection<ISession>("sessions");
     // use config
     bot_1.default.use((0, grammy_1.session)({
         initial,
         getSessionKey,
-        storage: new grammy_mongodb_storage_1.MongoDBAdapter({ collection }),
+        // storage: new MongoDBAdapter<SessionData>({ collection }),
     }));
 });
 const startBot = () => __awaiter(void 0, void 0, void 0, function* () {
