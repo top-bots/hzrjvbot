@@ -12,7 +12,7 @@ export interface SessionData {
   name?: string;
 }
 
-export type BotContext = Context & SessionFlavor<SessionData>;
+export type IBotContext = Context & SessionFlavor<SessionData>;
 
 export interface IQuestion {
   from: object;

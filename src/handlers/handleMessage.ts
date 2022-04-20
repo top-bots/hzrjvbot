@@ -1,8 +1,8 @@
 import { constants, states } from "../config";
 import { kbQuestion } from "../elements/keyboards";
-import { BotContext } from "../types";
+import { IBotContext } from "../types";
 
-const handleMessage = async (ctx: BotContext) => {
+const handleMessage = async (ctx: IBotContext) => {
   // record question
   if (ctx.session.state === states.WRITE_Q) {
     // check question length

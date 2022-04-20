@@ -2,15 +2,15 @@ import { NextFunction } from "grammy";
 import bot from "../bot";
 import { constants } from "../config";
 import { kbMain } from "../elements/keyboards";
-import { BotContext } from "../types";
+import { IBotContext } from "../types";
 
-export const handleQCancel = async (ctx: BotContext) => {
+export const handleQCancel = async (ctx: IBotContext) => {
   await ctx.reply(constants.MSG_Q_CANCEL, {
     reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },
   });
 };
 
-export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
+export const handleQSend = async (ctx: IBotContext, next: NextFunction) => {
   const questions = ctx.session.questions;
   const question = ctx.session.question;
   const newCoins = ctx.session.coins - 1;

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.states = exports.constants = void 0;
 exports.constants = {
-    SHOUT: "!!!!!!!!!!!!!!!1HERE!!!!!!!!!!!!!!!",
+    SHOUT: "!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!",
     // ids
     ID_BOT: "@hzrjvbot",
     ID_CH: "@hzrjvban",
