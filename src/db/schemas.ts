@@ -1,14 +1,19 @@
-import { ISession } from "@satont/grammy-mongodb-storage";
 import { Schema } from "mongoose";
-import { IQuestion } from "../types";
+import { IBotSession } from "./../types";
 
-export const questionSchema = new Schema<IQuestion>({
-  from: Object,
-  text: String,
-});
-
-export const sessionSchema = new Schema<ISession>({
+export const sessionSchema = new Schema<IBotSession>({
   _id: { $oid: String },
   key: String,
-  value: Object,
+  value: {
+    id: Number,
+    state: String,
+    coins: Number,
+    score: Number,
+    votes: Number,
+    question: String,
+    questions: [String],
+    qIndex: Number,
+    name: String,
+    isInvited: Boolean,
+  },
 });

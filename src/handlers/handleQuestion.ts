@@ -1,23 +1,22 @@
 import { NextFunction } from "grammy";
-import bot from "../bot";
-import { constants } from "../config";
 import { kbMain } from "../elements/keyboards";
-import { IBotContext } from "../types";
+import { constants } from "../elements/strings";
+import { BotContext } from "../types";
 
-export const handleQCancel = async (ctx: IBotContext) => {
+export const handleQCancel = async (ctx: BotContext) => {
   await ctx.reply(constants.MSG_Q_CANCEL, {
     reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },
   });
   ctx.session.question = undefined;
 };
 
-export const handleQSend = async (ctx: IBotContext, next: NextFunction) => {
+export const handleQSend = async (ctx: BotContext, next: NextFunction) => {
   const questions = ctx.session.questions;
   const question = ctx.session.question;
   const newCoins = ctx.session.coins - 1;
   const newVotes = ctx.session.votes + 2;
   if (question) {
-    await bot.api
+    await ctx.api
       .sendMessage(constants.ID_CH, question)
       .then(async (res) => {
         console.log("messageSentToChannel", res);

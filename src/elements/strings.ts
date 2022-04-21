@@ -31,10 +31,13 @@ export const constants = {
   MSG_NO_Q: "شما تاکنون سوالی نپرسیده اید",
   MSG_Q_ITEM: (questions: string[], i: number) =>
     `سوال ${i + 1}: \n\n${questions[i]}`,
-  MSG_CONGRAT: (answer: string) =>
+  MSG_CONGRAT_ANS: (answer: string) =>
     `تبریک شما یک امتیاز دریافت کردید! \n\nجواب شما: ${answer}`,
+  MSG_CONGRAT_INV: (coins: number) =>
+    `تبریک! شما یک نفر را دعوت و ۲۰ سکه دریافت کردید \n\nتعداد سکه ها: ${coins}`,
   MSG_VOTED: (votes: number) =>
     `رای شما ثبت شد! \nتعداد رای های باقی مانده: ${votes}`,
+  MSG_INVITE_LINK: (id: number) => `https://t.me/hzrjvbot?start=${id}`,
   // queries
   M_ASK_Q: "➕ پرسیدن یک سوال جدید",
   M_MY_QS: "❔ سوال هام",
@@ -51,9 +54,15 @@ export const constants = {
   ERR_Q_LEN: "متن چت شما باید بین ۵ تا ۲۵۰ کلمه باشد",
   ERR_TRY_LATER: "سرور شلوغه یه بار دیگه امتحان کن",
   ERR_CANT_VOTE: "خطا! شما رای کافی ندارید و نمیتوانید رای دهید",
+  ERR_ALREADY_INV: "شما قبلا دعوت شده اید!",
+  ERR_WTF: "نفهمیدم! از منوی پایین انتخاب کن",
 };
 
 export const states = {
   DEFAULT: "DEFAULT",
   WRITE_Q: "WRITE_Q",
+};
+
+export const queries = {
+  questions: "list",
 };

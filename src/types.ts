@@ -1,4 +1,5 @@
-import { Context, SessionFlavor } from "grammy";
+import { ISession } from "@satont/grammy-mongodb-storage";
+import { Bot, Context, SessionFlavor } from "grammy";
 
 export interface ISessionData {
   id: number;
@@ -10,11 +11,13 @@ export interface ISessionData {
   questions: string[];
   qIndex: number;
   name?: string;
+  isInvited: boolean;
 }
 
-export type IBotContext = Context & SessionFlavor<ISessionData>;
-
-export interface IQuestion {
-  from: object;
-  text: string;
+export interface IBotSession extends ISession {
+  value: ISessionData;
 }
+
+export type BotContext = Context & SessionFlavor<ISessionData>;
+
+export type BotType = Bot<BotContext>;

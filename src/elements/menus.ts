@@ -1,15 +1,20 @@
 import { Menu } from "@grammyjs/menu";
-import { constants } from "../config";
-import { IBotContext } from "../types";
+import { constants, queries } from "./strings";
+import { BotContext } from "../types";
+import { handleQuestionsInlineQuery } from "../handlers/handleInlineQueries";
 
-const updateListQuestion = async (ctx: IBotContext) => {
+const updateListQuestion = async (ctx: BotContext) => {
   const questions = ctx.session.questions;
   const i = ctx.session.qIndex;
   if (questions.length === 0) await ctx.reply(constants.MSG_NO_Q);
   else await ctx.editMessageText(constants.MSG_Q_ITEM(questions, i));
 };
 
-export const menuQuestions = new Menu<IBotContext>("questions-menu")
+export const menuQuestions = new Menu<BotContext>("questions-menu")
+  .switchInlineCurrent(
+    (ctx) => (ctx.session.questions.length > 0 ? "⏏️" : ""),
+    queries.questions
+  )
   .text(
     (ctx) =>
       ctx.session.questions.length > 0 && ctx.session.qIndex > 0 ? "⏪" : "",
@@ -48,3 +53,5 @@ export const menuQuestions = new Menu<IBotContext>("questions-menu")
       updateListQuestion(ctx);
     }
   );
+
+export default [menuQuestions];
