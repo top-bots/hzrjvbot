@@ -1,3 +1,4 @@
+import { Bot } from "grammy";
 import bot from "./bot";
 import { constants } from "./config";
 import {
@@ -5,13 +6,14 @@ import {
   handleCredit,
   handleMyQuestions,
   handleScore,
-  handleUpvote
+  handleUpvote,
 } from "./handlers/handleCommands";
 import handleMessage from "./handlers/handleMessage";
 import { handleQCancel, handleQSend } from "./handlers/handleQuestion";
 import handleStart from "./handlers/handleStart";
+import { IBotContext } from "./types";
 
-export const addListeners = () => {
+export const addListeners = (bot: Bot<IBotContext>) => {
   /** COMMANDS */
   bot.command("start", handleStart);
   bot.command("questions", handleMyQuestions);

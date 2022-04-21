@@ -1,5 +1,5 @@
 import { constants, states } from "../config";
-import { kbQuestion } from "../elements/keyboards";
+import { kbSendQ } from "../elements/keyboards";
 import { IBotContext } from "../types";
 
 const handleMessage = async (ctx: IBotContext) => {
@@ -13,7 +13,7 @@ const handleMessage = async (ctx: IBotContext) => {
       ctx.session.state = states.DEFAULT;
       ctx.session.question = question;
       await ctx.reply(constants.MSG_POST_Q, {
-        reply_markup: { keyboard: kbQuestion.build(), resize_keyboard: true },
+        reply_markup: { keyboard: kbSendQ.build(), resize_keyboard: true },
       });
     }
   }

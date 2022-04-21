@@ -24,7 +24,7 @@ const handleMessage = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
             ctx.session.state = config_1.states.DEFAULT;
             ctx.session.question = question;
             yield ctx.reply(config_1.constants.MSG_POST_Q, {
-                reply_markup: { keyboard: keyboards_1.kbQuestion.build(), resize_keyboard: true },
+                reply_markup: { keyboard: keyboards_1.kbSendQ.build(), resize_keyboard: true },
             });
         }
     }

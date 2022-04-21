@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.kbQuestion = exports.kbMain = void 0;
+exports.kbSendQ = exports.kbWriteQ = exports.kbMain = void 0;
 const grammy_1 = require("grammy");
 const config_1 = require("../config");
 exports.kbMain = new grammy_1.Keyboard()
@@ -11,6 +11,7 @@ exports.kbMain = new grammy_1.Keyboard()
     .text(config_1.constants.M_MY_QS)
     .row()
     .text(config_1.constants.M_INVITE);
-exports.kbQuestion = new grammy_1.Keyboard()
+exports.kbWriteQ = new grammy_1.Keyboard().text(config_1.constants.Q_CANCEL);
+exports.kbSendQ = new grammy_1.Keyboard()
     .text(config_1.constants.Q_SEND)
     .text(config_1.constants.Q_CANCEL);

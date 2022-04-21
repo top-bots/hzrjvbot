@@ -17,12 +17,13 @@ const bot_1 = __importDefault(require("../bot"));
 const config_1 = require("../config");
 const menus_1 = require("../elements/menus");
 const models_1 = require("./../db/models");
+const keyboards_1 = require("./../elements/keyboards");
 const handleAskQuestion = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const coins = ctx.session.coins;
     if (coins > 0) {
         ctx.session.state = config_1.states.WRITE_Q;
         yield ctx.reply(config_1.constants.MSG_WRITE_Q, {
-            reply_markup: { remove_keyboard: true },
+            reply_markup: { keyboard: keyboards_1.kbWriteQ.build(), resize_keyboard: true },
         });
     }
     else

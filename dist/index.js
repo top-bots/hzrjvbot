@@ -20,7 +20,7 @@ const config_1 = require("./src/config");
 const menus_1 = require("./src/elements/menus");
 const listeners_1 = require("./src/listeners");
 const runner_1 = require("@grammyjs/runner");
-const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
+const bootstrap = (bot) => __awaiter(void 0, void 0, void 0, function* () {
     // initial data for user session
     const initial = () => ({
         id: 0,
@@ -39,19 +39,19 @@ const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
         return (_a = ctx.from) === null || _a === void 0 ? void 0 : _a.id.toString();
     };
     // set-up db connections
-    yield mongoose_1.default.connect("mongodb://127.0.0.1:27017/test");
+    yield mongoose_1.default.connect("mongodb://127.0.0.1:27017/hzrjvb");
     const collection = mongoose_1.default.connection.db.collection("sessions");
     // use config
-    bot_1.default.use((0, grammy_1.session)({
+    bot.use((0, grammy_1.session)({
         initial,
         getSessionKey,
         storage: new grammy_mongodb_storage_1.MongoDBAdapter({ collection }),
     }));
 });
-const startBot = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield bootstrap();
-    bot_1.default.use(menus_1.menuQuestions);
-    (0, listeners_1.addListeners)();
-    (0, runner_1.run)(bot_1.default);
+const startBot = (bot) => __awaiter(void 0, void 0, void 0, function* () {
+    yield bootstrap(bot);
+    bot.use(menus_1.menuQuestions);
+    (0, listeners_1.addListeners)(bot);
+    (0, runner_1.run)(bot);
 });
-startBot();
+startBot(bot_1.default);

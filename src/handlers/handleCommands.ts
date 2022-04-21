@@ -3,13 +3,14 @@ import { constants, states } from "../config";
 import { menuQuestions } from "../elements/menus";
 import { IBotContext } from "../types";
 import { Session } from "./../db/models";
+import { kbWriteQ } from "./../elements/keyboards";
 
 export const handleAskQuestion = async (ctx: IBotContext) => {
   const coins = ctx.session.coins;
   if (coins > 0) {
     ctx.session.state = states.WRITE_Q;
     await ctx.reply(constants.MSG_WRITE_Q, {
-      reply_markup: { remove_keyboard: true },
+      reply_markup: { keyboard: kbWriteQ.build(), resize_keyboard: true },
     });
   } else ctx.reply(constants.ERR_CREDIT);
 };

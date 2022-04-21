@@ -10,6 +10,8 @@ export const kbMain = new Keyboard()
   .row()
   .text(constants.M_INVITE);
 
-export const kbQuestion = new Keyboard()
+export const kbWriteQ = new Keyboard().text(constants.Q_CANCEL);
+
+export const kbSendQ = new Keyboard()
   .text(constants.Q_SEND)
   .text(constants.Q_CANCEL);

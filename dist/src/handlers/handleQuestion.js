@@ -20,6 +20,7 @@ const handleQCancel = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     yield ctx.reply(config_1.constants.MSG_Q_CANCEL, {
         reply_markup: { keyboard: keyboards_1.kbMain.build(), resize_keyboard: true },
     });
+    ctx.session.question = undefined;
 });
 exports.handleQCancel = handleQCancel;
 const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +28,7 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
     const question = ctx.session.question;
     const newCoins = ctx.session.coins - 1;
     const newVotes = ctx.session.votes + 2;
-    if (question)
+    if (question) {
         yield bot_1.default.api
             .sendMessage(config_1.constants.ID_CH, question)
             .then((res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,6 +45,10 @@ const handleQSend = (ctx, next) => __awaiter(void 0, void 0, void 0, function* (
             console.log(err);
             yield ctx.reply(config_1.constants.ERR_TRY_LATER);
         }));
+    }
+    else {
+        ctx.reply(config_1.constants.ERR_Q_LEN);
+    }
     return ctx.session;
 });
 exports.handleQSend = handleQSend;

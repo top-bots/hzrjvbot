@@ -8,6 +8,7 @@ export const handleQCancel = async (ctx: IBotContext) => {
   await ctx.reply(constants.MSG_Q_CANCEL, {
     reply_markup: { keyboard: kbMain.build(), resize_keyboard: true },
   });
+  ctx.session.question = undefined;
 };
 
 export const handleQSend = async (ctx: IBotContext, next: NextFunction) => {
@@ -15,7 +16,7 @@ export const handleQSend = async (ctx: IBotContext, next: NextFunction) => {
   const question = ctx.session.question;
   const newCoins = ctx.session.coins - 1;
   const newVotes = ctx.session.votes + 2;
-  if (question)
+  if (question) {
     await bot.api
       .sendMessage(constants.ID_CH, question)
       .then(async (res) => {
@@ -38,5 +39,8 @@ export const handleQSend = async (ctx: IBotContext, next: NextFunction) => {
         console.log(err);
         await ctx.reply(constants.ERR_TRY_LATER);
       });
+  } else {
+    ctx.reply(constants.ERR_Q_LEN);
+  }
   return ctx.session;
 };
