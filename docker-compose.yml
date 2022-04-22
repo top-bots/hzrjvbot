@@ -14,9 +14,9 @@ services:
   hzrjvb-mongo:
     image: mongo
     restart: always
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: example
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
     volumes:
       - /data/mongodb:/data/db
     networks:

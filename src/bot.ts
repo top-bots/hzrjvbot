@@ -24,8 +24,8 @@ const bootstrap = async (bot: BotType) => {
   });
 
   // set-up db connections
-  await mongoose.connect("mongodb://hzrjvb-mongo:27017/botdb", {
-    // auth: { username: "root", password: "example" },
+  await mongoose.connect("mongodb://admin:admin@hzrjvb-mongo:27017/botdb", {
+    authSource: "admin",
   });
   const collection = mongoose.connection.db.collection<ISession>("sessions");
   const storage = new MongoDBAdapter<ISessionData>({ collection });
