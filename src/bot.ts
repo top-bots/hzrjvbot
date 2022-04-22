@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { bindAll } from "./binders";
 import { states } from "./elements/strings";
 import { BotContext, BotType, ISessionData } from "./types";
+import { getSessionKey } from "./utils/functions";
 
 dotenv.config();
 
@@ -22,15 +23,10 @@ const bootstrap = async (bot: BotType) => {
     isInvited: false,
   });
 
-  // Stores data per user.
-  const getSessionKey = (ctx: any): string | undefined => {
-    // Give every user their personal session storage
-    // (will be shared across groups and in their private chat)
-    return ctx.from?.id.toString();
-  };
-
   // set-up db connections
-  await mongoose.connect("mongodb://127.0.0.1:27017/hzrjvb");
+  await mongoose.connect("mongodb://hzrjvb-mongo:27017/botdb", {
+    // auth: { username: "root", password: "example" },
+  });
   const collection = mongoose.connection.db.collection<ISession>("sessions");
   const storage = new MongoDBAdapter<ISessionData>({ collection });
 

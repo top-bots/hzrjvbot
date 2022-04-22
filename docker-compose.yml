@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  hzrjvb-node:
+    build: .
+    command: npm start
+    networks:
+      - hzrjvb
+    depends_on:
+      - hzrjvb-mongo
+    image: "hzrjvb/app:v1"
+    container_name: hzrjvb_app
+
+  hzrjvb-mongo:
+    image: mongo
+    restart: always
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - /data/mongodb:/data/db
+    networks:
+      - hzrjvb
+    ports:
+      - 27017:27017
+
+networks:
+  hzrjvb:
+    name: hzrjvb

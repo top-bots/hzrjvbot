@@ -21,7 +21,8 @@ const handleUpvote = async (ctx: BotContext) => {
         // notify to voter privately
         await ctx.api.sendMessage(voterId, constants.MSG_VOTED(newVotes));
 
-        // increase score of answerer
+        // TODO migrate to storageAdapter
+        // increase score of answerer 
         await Session.findOne({ key: answererId.toString() })
           .then(async (answererSession) => {
             if (answererSession?.value) {
