@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   hzrjvb-node:
@@ -26,4 +26,3 @@ services:
 
 networks:
   hzrjvb:
-    name: hzrjvb
